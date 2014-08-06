@@ -18,12 +18,12 @@
 package org.opensaml.xml.security.x509;
 
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -31,11 +31,12 @@ import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.opensaml.xml.XMLObjectBaseTestCase;
 import org.opensaml.xml.security.DefaultSecurityConfigurationBootstrap;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.SecurityHelper;
-import org.opensaml.xml.util.Base64;
 
 /**
  * Tests the X509Util utility methods.
@@ -282,14 +283,6 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         entityCert1AltNameURL = SecurityHelper.buildJavaX509Cert(entityCert1AltNameURLBase64);
         entityCert1AltNameIP = SecurityHelper.buildJavaX509Cert(entityCert1AltNameIPBase64);
         
-        SecurityHelper.buildJavaX509Cert(caCertBase64);
-        SecurityHelper.buildJavaX509CRL(caCRLBase64);
-        
-        new X500Principal("cn=foobar.example.org, O=Internet2");
-        new X500Principal("cn=ca.example.org, O=Internet2");
-        new BigInteger("49");
-        Base64.decode(entityCertSKIBase64);
-        
         altNameDNS = "asimov.example.org";
         altNameURN = "urn:foo:example.org:idp";
         altNameURL = "http://heinlein.example.org";
@@ -298,6 +291,67 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         altNameTypeIP = X509Util.IP_ADDRESS_ALT_NAME;
         altNameTypeURI = X509Util.URI_ALT_NAME;
         altNameTypeDNS = X509Util.DNS_ALT_NAME;
+    }
+    
+    /**
+     *  Test common name (CN) extraction from X500Principal.
+     */
+    public void testGetCommonNames() {
+        List<String> commonNames;
+        
+        // 1 component
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org"));
+        assertNotNull(commonNames);
+        assertEquals(1, commonNames.size());
+        assertTrue(commonNames.contains("foo.example.org"));
+        
+        // 2 components, 1 cn
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, o=MyOrg"));
+        assertNotNull(commonNames);
+        assertEquals(1, commonNames.size());
+        assertTrue(commonNames.contains("foo.example.org"));
+        
+        // 2 components each with cn
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, cn=MyOrg"));
+        assertNotNull(commonNames);
+        assertEquals(2, commonNames.size());
+        assertTrue(commonNames.contains("foo.example.org"));
+        assertTrue(commonNames.contains("MyOrg"));
+        
+        // 2 components, one of them with multiple cn AVAs
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org+cn=bar.example.org+cn=baz.example.org, o=MyOrg"));
+        assertNotNull(commonNames);
+        assertEquals(3, commonNames.size());
+        assertTrue(commonNames.contains("foo.example.org"));
+        assertTrue(commonNames.contains("bar.example.org"));
+        assertTrue(commonNames.contains("baz.example.org"));
+        
+        // 2 components, both with multiple cn AVAs
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org+cn=bar.example.org+cn=baz.example.org, cn=Org1+cn=Org2"));
+        assertNotNull(commonNames);
+        assertEquals(5, commonNames.size());
+        assertTrue(commonNames.contains("foo.example.org"));
+        assertTrue(commonNames.contains("bar.example.org"));
+        assertTrue(commonNames.contains("baz.example.org"));
+        assertTrue(commonNames.contains("Org1"));
+        assertTrue(commonNames.contains("Org2"));
+        
+        // No cn at all
+        commonNames = X509Util.getCommonNames(new X500Principal("uid=foo, o=MyOrg"));
+        assertNotNull(commonNames);
+        assertEquals(0, commonNames.size());
+    }
+    
+    /**
+     *  Test Subject Key Identifier (SKI) extraction from certificate.
+     * @throws DecoderException 
+     */
+    public void testGetSubjectKeyIdentifier() throws DecoderException {
+        // This is the cert SKI according to OpenSSL 'openssl x509 -in entity.crt -noout -text'
+        String hexSKI = "D2:57:F5:C1:8C:11:26:1B:C6:65:82:F6:5A:93:0E:CA:40:CD:75:E5";
+        byte[] controlSKI = Hex.decodeHex(hexSKI.replaceAll(":", "").toCharArray());
+        byte[] certSKI = X509Util.getSubjectKeyIdentifier(entityCert);
+        assertTrue(Arrays.equals(controlSKI, certSKI));
     }
     
     /**

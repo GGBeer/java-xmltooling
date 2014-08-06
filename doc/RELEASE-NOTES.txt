@@ -4,6 +4,7 @@ Changes in Release 1.4.2
 [JXT-109] - SimpleKeyInfoReferenceEncryptedKeyResolver constructor missing 'public' modifier 
 [JXT-110] - SecurityHelper derivePublicKey incorrectly derives public key for DSAPrivateKey 
 [JXT-111] - IndexingObjectStore uses hashCode() in an unsafe manner
+[JXT-112] - Update Bouncy Castle to latest version 
 
 Changes in Release 1.4.1
 =============================================
