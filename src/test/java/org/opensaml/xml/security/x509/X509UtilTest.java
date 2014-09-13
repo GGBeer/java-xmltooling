@@ -340,6 +340,25 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         commonNames = X509Util.getCommonNames(new X500Principal("uid=foo, o=MyOrg"));
         assertNotNull(commonNames);
         assertEquals(0, commonNames.size());
+        
+        // Test input of raw OID
+        commonNames = X509Util.getCommonNames(new X500Principal("2.5.4.3=foo.example.org"));
+        assertNotNull(commonNames);
+        assertEquals(1, commonNames.size());
+        assertTrue(commonNames.contains("foo.example.org"));
+        
+        // Test attack DNs per CVE-2014-3577
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, o=foo \\,cn=www.apache.org"));
+        assertNotNull(commonNames);
+        assertEquals(1, commonNames.size());
+        assertFalse(commonNames.contains("www.apache.org"));
+        assertTrue(commonNames.contains("foo.example.org"));
+        
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, o=cn=www.apache.org\\, foo"));
+        assertNotNull(commonNames);
+        assertEquals(1, commonNames.size());
+        assertFalse(commonNames.contains("www.apache.org"));
+        assertTrue(commonNames.contains("foo.example.org"));
     }
     
     /**
