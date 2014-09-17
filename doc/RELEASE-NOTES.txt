@@ -1,3 +1,7 @@
+Changes in Release 1.4.3
+=============================================
+[JXT-114] - X509Util getCommonNames returns a list in the reverse order of what is expected 
+
 Changes in Release 1.4.2
 =============================================
 [JXT-108] - Encrypter setKeyResolverCriteria() typo, should be getKeyResolverCriteria()
