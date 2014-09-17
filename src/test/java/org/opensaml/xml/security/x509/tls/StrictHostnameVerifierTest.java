@@ -64,6 +64,48 @@ public class StrictHostnameVerifierTest extends TestCase {
         Assert.assertFalse(verifier.verify(host, sslSession));
     }
     
+    public void testSuccessDNWildcard() {
+        String host = "foo.example.org";
+        SSLSession sslSession = buildSSLSession(host, "cn=*.example.org, O=SomeOrg");
+        Assert.assertTrue(verifier.verify(host, sslSession));
+    }
+    
+    public void testFailureDNWildcard() {
+        String host = "foo.subdomain.example.org";
+        SSLSession sslSession = buildSSLSession(host, "cn=*.example.org, O=SomeOrg");
+        Assert.assertFalse(verifier.verify(host, sslSession));
+    }
+    
+    public void testSuccessAltnameWildcard() {
+        String host = "foo.example.org";
+        SSLSession sslSession = buildSSLSession(host, "cn=notfoo.example.org, O=SomeOrg", "*.example.org");
+        Assert.assertTrue(verifier.verify(host, sslSession));
+    }
+
+    public void testFailureAltnameWildcard() {
+        String host = "foo.subdomain.example.org";
+        SSLSession sslSession = buildSSLSession(host, "cn=notfoo.example.org, O=SomeOrg", "*.example.org");
+        Assert.assertFalse(verifier.verify(host, sslSession));
+    }
+    
+    public void testMultipleCNsInDN() {
+        String host = "foo.example.org";
+        // Only the "first" CN should work per strict hostname verifier rules.  
+        // In the this RFC 1779/2253 serialization, the first/most-specific CN will be the one on the left.
+        SSLSession sslSession = buildSSLSession(host, "cn=foo.example.org, cn=other1.example.org, cn=other2.example.org, o=SomeOrg");
+        Assert.assertTrue(verifier.verify(host, sslSession));
+        
+        sslSession = buildSSLSession(host, "cn=foo.example.org, cn=WebServers, cn=Hosts, o=SomeOrg");
+        Assert.assertTrue(verifier.verify(host, sslSession));
+        
+        // These should *not* work as the host is not the first CN.
+        sslSession = buildSSLSession(host, "cn=other1.example.org, cn=foo.example.org, cn=other2.example.org, o=SomeOrg");
+        Assert.assertFalse(verifier.verify(host, sslSession));
+        
+        sslSession = buildSSLSession(host, "cn=other1.example.org, cn=other2.example.org, cn=foo.example.org, o=SomeOrg");
+        Assert.assertFalse(verifier.verify(host, sslSession));
+    }
+    
     public void testMaliciousDNs() {
         String host = "www.apache.org";
         SSLSession sslSession = buildSSLSession(host, "cn=foo.example.org, o=foo \\,cn=www.apache.org");
