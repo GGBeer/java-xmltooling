@@ -1,6 +1,7 @@
 Changes in Release 1.4.3
 =============================================
 [JXT-114] - X509Util getCommonNames returns a list in the reverse order of what is expected 
+[JXT-115] - Add HostnameVerifier impl which processes cert subject DN by parsing the ASN.1 encoding
 
 Changes in Release 1.4.2
 =============================================
