@@ -303,22 +303,31 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org"));
         assertNotNull(commonNames);
         assertEquals(1, commonNames.size());
-        assertTrue(commonNames.contains("foo.example.org"));
+        assertEquals("foo.example.org", commonNames.get(0));
         
         // 2 components, 1 cn
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, o=MyOrg"));
         assertNotNull(commonNames);
         assertEquals(1, commonNames.size());
-        assertTrue(commonNames.contains("foo.example.org"));
+        assertEquals("foo.example.org", commonNames.get(0));
         
         // 2 components each with cn
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, cn=MyOrg"));
         assertNotNull(commonNames);
         assertEquals(2, commonNames.size());
-        assertTrue(commonNames.contains("foo.example.org"));
-        assertTrue(commonNames.contains("MyOrg"));
+        assertEquals("foo.example.org", commonNames.get(0));
+        assertEquals("MyOrg", commonNames.get(1));
         
-        // 2 components, one of them with multiple cn AVAs
+        // 4 components, 3 cn 
+        commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, cn=WebServers, cn=Hosts, o=MyOrg"));
+        assertNotNull(commonNames);
+        assertEquals(3, commonNames.size());
+        assertEquals("foo.example.org", commonNames.get(0));
+        assertEquals("WebServers", commonNames.get(1));
+        assertEquals("Hosts", commonNames.get(2));
+        
+        // 2 components, one of them with multiple cn AVAs. 
+        // Note: The set of AVAs in a DN component is unordered, so can't test returned ordering.
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org+cn=bar.example.org+cn=baz.example.org, o=MyOrg"));
         assertNotNull(commonNames);
         assertEquals(3, commonNames.size());
@@ -327,6 +336,7 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         assertTrue(commonNames.contains("baz.example.org"));
         
         // 2 components, both with multiple cn AVAs
+        // Note: The set of AVAs in a DN component is unordered, so can't test returned ordering.
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org+cn=bar.example.org+cn=baz.example.org, cn=Org1+cn=Org2"));
         assertNotNull(commonNames);
         assertEquals(5, commonNames.size());
@@ -345,20 +355,20 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         commonNames = X509Util.getCommonNames(new X500Principal("2.5.4.3=foo.example.org"));
         assertNotNull(commonNames);
         assertEquals(1, commonNames.size());
-        assertTrue(commonNames.contains("foo.example.org"));
+        assertEquals("foo.example.org", commonNames.get(0));
         
         // Test attack DNs per CVE-2014-3577
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, o=foo \\,cn=www.apache.org"));
         assertNotNull(commonNames);
         assertEquals(1, commonNames.size());
         assertFalse(commonNames.contains("www.apache.org"));
-        assertTrue(commonNames.contains("foo.example.org"));
+        assertEquals("foo.example.org", commonNames.get(0));
         
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org, o=cn=www.apache.org\\, foo"));
         assertNotNull(commonNames);
         assertEquals(1, commonNames.size());
         assertFalse(commonNames.contains("www.apache.org"));
-        assertTrue(commonNames.contains("foo.example.org"));
+        assertEquals("foo.example.org", commonNames.get(0));
     }
     
     /**
