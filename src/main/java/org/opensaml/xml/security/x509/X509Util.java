@@ -161,7 +161,9 @@ public class X509Util {
             ASN1InputStream asn1Stream = new ASN1InputStream(dn.getEncoded());
             ASN1Sequence dnSequence = (ASN1Sequence) asn1Stream.readObject();
 
-            for (int i = 0; i < dnSequence.size(); i++) {
+            // Walk the DN sequence in reverse order from last to first, so that the CN(s) from the most-specific RDN
+            // are first in the returned list, consistent with RFC 1779/2253 RDN ordering.
+            for (int i = dnSequence.size()-1; i >= 0; i--) {
                 ASN1Primitive rdn = dnSequence.getObjectAt(i).toASN1Primitive();
                 if (!(rdn instanceof ASN1Set)) {
                     log.debug("DN RDN was not an instance of ASN1Set.");
@@ -171,6 +173,7 @@ public class X509Util {
                 // Each RDN is an ASN.1 set (note: unordered)
                 ASN1Set rdnSet = (ASN1Set) rdn;
 
+                // Walk the attributes within the RDN from first to last, to preserve the ordering of the encoded form.
                 for (int j = 0; j < rdnSet.size(); j++) {
                     ASN1Sequence attributeTypeAndValue = (ASN1Sequence) rdnSet.getObjectAt(j).toASN1Primitive();
 
@@ -193,10 +196,6 @@ public class X509Util {
 
             asn1Stream.close();
 
-            // Reverse the order so that the most-specific CN is first in the list, 
-            // consistent with RFC 1779/2253 RDN ordering.
-            Collections.reverse(commonNames);
-            
             return commonNames;
 
         } catch (IOException e) {

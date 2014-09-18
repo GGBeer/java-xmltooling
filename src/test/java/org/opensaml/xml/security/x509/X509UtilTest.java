@@ -326,6 +326,13 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         assertEquals("WebServers", commonNames.get(1));
         assertEquals("Hosts", commonNames.get(2));
         
+        // 4 components, 2 cn, a cn is not first nor last
+        commonNames = X509Util.getCommonNames(new X500Principal("uid=foo, cn=Admins, cn=People, o=MyOrg"));
+        assertNotNull(commonNames);
+        assertEquals(2, commonNames.size());
+        assertEquals("Admins", commonNames.get(0));
+        assertEquals("People", commonNames.get(1));
+        
         // 2 components, one of them with multiple cn AVAs. 
         // Note: The set of AVAs in a DN component is unordered, so can't test returned ordering.
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org+cn=bar.example.org+cn=baz.example.org, o=MyOrg"));
@@ -340,11 +347,11 @@ public class X509UtilTest extends XMLObjectBaseTestCase {
         commonNames = X509Util.getCommonNames(new X500Principal("cn=foo.example.org+cn=bar.example.org+cn=baz.example.org, cn=Org1+cn=Org2"));
         assertNotNull(commonNames);
         assertEquals(5, commonNames.size());
-        assertTrue(commonNames.contains("foo.example.org"));
-        assertTrue(commonNames.contains("bar.example.org"));
-        assertTrue(commonNames.contains("baz.example.org"));
-        assertTrue(commonNames.contains("Org1"));
-        assertTrue(commonNames.contains("Org2"));
+        assertTrue(commonNames.subList(0, 3).contains("foo.example.org"));
+        assertTrue(commonNames.subList(0, 3).contains("bar.example.org"));
+        assertTrue(commonNames.subList(0, 3).contains("baz.example.org"));
+        assertTrue(commonNames.subList(3, 5).contains("Org1"));
+        assertTrue(commonNames.subList(3, 5).contains("Org2"));
         
         // No cn at all
         commonNames = X509Util.getCommonNames(new X500Principal("uid=foo, o=MyOrg"));
