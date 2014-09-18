@@ -159,33 +159,32 @@ public class X509Util {
         List<String> commonNames = new LinkedList<String>();
         try {
             ASN1InputStream asn1Stream = new ASN1InputStream(dn.getEncoded());
-            ASN1Primitive parent = asn1Stream.readObject();
+            ASN1Sequence dnSequence = (ASN1Sequence) asn1Stream.readObject();
 
-            String cn = null;
-            ASN1Primitive dnComponent;
-            ASN1Sequence grandChild;
-            ASN1ObjectIdentifier componentId;
-            for (int i = 0; i < ((ASN1Sequence) parent).size(); i++) {
-                dnComponent = ((ASN1Sequence) parent).getObjectAt(i).toASN1Primitive();
-                if (!(dnComponent instanceof ASN1Set)) {
-                    log.debug("No DN components.");
+            for (int i = 0; i < dnSequence.size(); i++) {
+                ASN1Primitive rdn = dnSequence.getObjectAt(i).toASN1Primitive();
+                if (!(rdn instanceof ASN1Set)) {
+                    log.debug("DN RDN was not an instance of ASN1Set.");
                     continue;
                 }
+                
+                // Each RDN is an ASN.1 set (note: unordered)
+                ASN1Set rdnSet = (ASN1Set) rdn;
 
-                // Each DN component is a set
-                for (int j = 0; j < ((ASN1Set) dnComponent).size(); j++) {
-                    grandChild = (ASN1Sequence) ((ASN1Set) dnComponent).getObjectAt(j).toASN1Primitive();
+                for (int j = 0; j < rdnSet.size(); j++) {
+                    ASN1Sequence attributeTypeAndValue = (ASN1Sequence) rdnSet.getObjectAt(j).toASN1Primitive();
 
-                    if (grandChild.getObjectAt(0) != null
-                            && grandChild.getObjectAt(0).toASN1Primitive() instanceof ASN1ObjectIdentifier) {
-                        componentId = (ASN1ObjectIdentifier) grandChild.getObjectAt(0).toASN1Primitive();
+                    if (attributeTypeAndValue.getObjectAt(0) != null
+                            && attributeTypeAndValue.getObjectAt(0).toASN1Primitive() instanceof ASN1ObjectIdentifier) {
+                        ASN1ObjectIdentifier attributeTypeId = (ASN1ObjectIdentifier) attributeTypeAndValue
+                                .getObjectAt(0).toASN1Primitive();
 
-                        if (CN_OID.equals(componentId.getId())) {
-                            // OK, this dn component is actually a cn attribute
-                            if (grandChild.getObjectAt(1) != null
-                                    && grandChild.getObjectAt(1).toASN1Primitive() instanceof ASN1String) {
-                                cn = ((ASN1String) grandChild.getObjectAt(1).toASN1Primitive()).getString();
-                                commonNames.add(cn);
+                        if (CN_OID.equals(attributeTypeId.getId())) {
+                            // OK, this AVA is actually a cn attribute
+                            if (attributeTypeAndValue.getObjectAt(1) != null
+                                    && attributeTypeAndValue.getObjectAt(1).toASN1Primitive() instanceof ASN1String) {
+                                ASN1String cn = (ASN1String) attributeTypeAndValue.getObjectAt(1).toASN1Primitive();
+                                commonNames.add(cn.getString());
                             }
                         }
                     }
