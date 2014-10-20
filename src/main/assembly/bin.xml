@@ -22,17 +22,6 @@
                 <exclude>*:jcip-annotations:*</exclude>
             </excludes>
         </dependencySet>
-        <dependencySet>
-            <outputDirectory>/lib/endorsed</outputDirectory>
-            <directoryMode>774</directoryMode>
-            <fileMode>444</fileMode>
-            <scope>runtime</scope>
-            <includes>
-                <include>org.apache.xerces:*</include>
-                <include>xalan:*</include>
-                <include>xml-resolver:*</include>
-            </includes>
-        </dependencySet>
     </dependencySets>
     
     <fileSets>
