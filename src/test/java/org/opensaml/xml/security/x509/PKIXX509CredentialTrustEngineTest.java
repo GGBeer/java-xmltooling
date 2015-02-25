@@ -91,7 +91,7 @@ public class PKIXX509CredentialTrustEngineTest extends XMLObjectBaseTestCase {
                 MAX_DEPTH
                 );
         
-        testValidateSuccess("Entity cert was good, full path in cred, no trusted names");
+        testValidateFailure("Entity cert was good, full path in cred, no trusted names");
     }
     
     public void testGoodPathBadTrustedName() {

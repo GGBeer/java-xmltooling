@@ -1,6 +1,7 @@
 Changes in Release 1.4.5
 =============================================
 [JXT-116] - Default config for X509Credential KeyInfo generation should emit cert chain in addition to entity cert 
+[JXT-117] - Adjust PKIX TrustEngine name handling
 
 Changes in Release 1.4.4
 =============================================
