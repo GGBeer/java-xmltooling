@@ -1,3 +1,7 @@
+Changes in Release 1.4.6
+=============================================
+[JXT-118] - ParserPool impls are not correctly resetting builder ErrorHandler and EntityResolver on second and subsequent checkout 
+
 Changes in Release 1.4.5
 =============================================
 [JXT-116] - Default config for X509Credential KeyInfo generation should emit cert chain in addition to entity cert 

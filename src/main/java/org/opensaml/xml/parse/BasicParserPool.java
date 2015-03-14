@@ -33,7 +33,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 
-import org.opensaml.xml.Configuration;
 import org.opensaml.xml.util.LazyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,6 +165,7 @@ public class BasicParserPool implements ParserPool {
         }
 
         if (builder != null) {
+            prepareBuilder(builder);
             return new DocumentBuilderProxy(builder, this, version);
         }
 
@@ -574,18 +574,25 @@ public class BasicParserPool implements ParserPool {
         try {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-            if (entityResolver != null) {
-                builder.setEntityResolver(entityResolver);
-            }
-
-            if (errorHandler != null) {
-                builder.setErrorHandler(errorHandler);
-            }
-
             return builder;
         } catch (ParserConfigurationException e) {
             log.error("Unable to create new document builder", e);
             throw new XMLParserException("Unable to create new document builder", e);
+        }
+    }
+    
+    /**
+     * Prepare a document builder instance for use, before returning it from a checkout call.
+     * 
+     * @param builder the document builder to prepare
+     */
+    private void prepareBuilder(DocumentBuilder builder) {
+        if (entityResolver != null) {
+            builder.setEntityResolver(entityResolver);
+        }
+        
+        if (errorHandler != null) {
+            builder.setErrorHandler(errorHandler);
         }
     }
     
