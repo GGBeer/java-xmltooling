@@ -1,6 +1,7 @@
 Changes in Release 1.4.6
 =============================================
 [JXT-118] - ParserPool impls are not correctly resetting builder ErrorHandler and EntityResolver on second and subsequent checkout 
+[JXT-119] - Various ParserPool interface methods should never return null 
 
 Changes in Release 1.4.5
 =============================================
