@@ -182,7 +182,7 @@ public class StaticBasicParserPool implements ParserPool {
             return new DocumentBuilderProxy(builder, this);
         }
 
-        return null;
+        throw new XMLParserException("Unable to obtain a DocumentBuilder");
     }
 
     /** {@inheritDoc} */
@@ -224,6 +224,9 @@ public class StaticBasicParserPool implements ParserPool {
         DocumentBuilder builder = getBuilder();
         Document document = builder.newDocument();
         returnBuilder(builder);
+        if (document == null) {
+            throw new XMLParserException("DocumentBuilder returned a null Document");
+        }
         return document;
     }
 
@@ -232,6 +235,9 @@ public class StaticBasicParserPool implements ParserPool {
         DocumentBuilder builder = getBuilder();
         try {
             Document document = builder.parse(input);
+            if (document == null) {
+                throw new XMLParserException("DocumentBuilder parsed a null Document");
+            }
             return document;
         } catch (SAXException e) {
             throw new XMLParserException("Invalid XML", e);
@@ -247,6 +253,9 @@ public class StaticBasicParserPool implements ParserPool {
         DocumentBuilder builder = getBuilder();
         try {
             Document document = builder.parse(new InputSource(input));
+            if (document == null) {
+                throw new XMLParserException("DocumentBuilder parsed a null Document");
+            }
             return document;
         } catch (SAXException e) {
             throw new XMLParserException("Invalid XML", e);
