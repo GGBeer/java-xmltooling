@@ -18,16 +18,17 @@
 package org.opensaml.xml.security;
 
 import java.io.InputStream;
+import java.security.KeyException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import junit.framework.TestCase;
+
 import org.opensaml.xml.encryption.EncryptionConstants;
 import org.opensaml.xml.signature.SignatureConstants;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test for {@link SecurityHelper}.
@@ -186,6 +187,23 @@ public class SecurityHelperTest extends TestCase {
         } catch (SecurityException e) {
             // expected
         }
+    }
+    
+    public void testGenerateSymmetricKey() throws NoSuchAlgorithmException, KeyException {
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128_GCM));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_KEYWRAP_AES128));
+       
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES192));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES192_GCM));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_KEYWRAP_AES192));
+        
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256_GCM));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_KEYWRAP_AES256));
+        
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_BLOCKCIPHER_TRIPLEDES));
+        assertNotNull(SecurityHelper.generateSymmetricKey(EncryptionConstants.ALGO_ID_KEYWRAP_TRIPLEDES));
     }
 
     /** Generic key testing. */
