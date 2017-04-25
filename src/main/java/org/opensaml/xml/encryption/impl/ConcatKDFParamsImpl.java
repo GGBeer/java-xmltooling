@@ -149,7 +149,7 @@ public class ConcatKDFParamsImpl extends AbstractValidatingXMLObject implements 
   }
 
   @Override
-  public DigestMethod getDigestMethod(DigestMethod newDigestMethod)
+  public DigestMethod getDigestMethod()
   {
     return this.digestMethod;
   }
