@@ -107,7 +107,7 @@ public class ConcatKDFParamsImpl extends AbstractValidatingXMLObject implements 
   @Override
   public void setPartyUInfo(String newPartyUInfo)
   {
-    this.partyUInfo = prepareForAssignment(this.partyUInfo, newPartyUInfo);
+    this.partyUInfo = prepareForAssignment(this.partyUInfo, newPartyUInfo, false); // Allow EmptyString value
 
   }
 
@@ -120,7 +120,7 @@ public class ConcatKDFParamsImpl extends AbstractValidatingXMLObject implements 
   @Override
   public void setPartyVInfo(String newPartyVInfo)
   {
-    this.partyVInfo = prepareForAssignment(this.partyVInfo, newPartyVInfo);
+    this.partyVInfo = prepareForAssignment(this.partyVInfo, newPartyVInfo, false); // Allow EmptyString value
 
   }
 
