@@ -191,15 +191,15 @@
         <!-- ConcatKDFParams -->
         <ObjectProvider qualifiedName="xenc11:ConcatKDFParams">
             <BuilderClass className="org.opensaml.xml.encryption.impl.ConcatKDFParamsBuilder"/>
-            <MarshallingClass className="org.opensaml.xml.signature.impl.ConcatKDFParamsMarshaller"/>
-            <UnmarshallingClass className="org.opensaml.xml.signature.impl.ConcatKDFParamsUnmarshaller"/>
+            <MarshallingClass className="org.opensaml.xml.encryption.impl.ConcatKDFParamsMarshaller"/>
+            <UnmarshallingClass className="org.opensaml.xml.encryption.impl.ConcatKDFParamsUnmarshaller"/>
         </ObjectProvider>     
         
         <!-- KeyDerivationMethod -->
         <ObjectProvider qualifiedName="xenc11:KeyDerivationMethod">
             <BuilderClass className="org.opensaml.xml.encryption.impl.KeyDerivationMethodBuilder"/>
-            <MarshallingClass className="org.opensaml.xml.signature.impl.KeyDerivationMethodMarshaller"/>
-            <UnmarshallingClass className="org.opensaml.xml.signature.impl.KeyDerivationMethodUnmarshaller"/>
+            <MarshallingClass className="org.opensaml.xml.encryption.impl.KeyDerivationMethodMarshaller"/>
+            <UnmarshallingClass className="org.opensaml.xml.encryption.impl.KeyDerivationMethodUnmarshaller"/>
         </ObjectProvider>     
 
     </ObjectProviders>
