@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMLTooling xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns="http://www.opensaml.org/xmltooling-config">
+<XMLTooling xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"
+            xmlns:xenc11='http://www.w3.org/2009/xmlenc11#' xmlns="http://www.opensaml.org/xmltooling-config">
     
     <ObjectProviders>
         
@@ -184,7 +185,23 @@
             <MarshallingClass className="org.opensaml.xml.encryption.impl.TransformsMarshaller"/>
             <UnmarshallingClass className="org.opensaml.xml.encryption.impl.TransformsUnmarshaller"/>
         </ObjectProvider>
- 
+
+        <!-- 1.1 Stuff -->
+
+        <!-- ConcatKDFParams -->
+        <ObjectProvider qualifiedName="xenc11:ConcatKDFParams">
+            <BuilderClass className="org.opensaml.xml.encryption.impl.ConcatKDFParamsBuilder"/>
+            <MarshallingClass className="org.opensaml.xml.signature.impl.ConcatKDFParamsMarshaller"/>
+            <UnmarshallingClass className="org.opensaml.xml.signature.impl.ConcatKDFParamsUnmarshaller"/>
+        </ObjectProvider>     
+        
+        <!-- KeyDerivationMethod -->
+        <ObjectProvider qualifiedName="xenc11:KeyDerivationMethod">
+            <BuilderClass className="org.opensaml.xml.encryption.impl.KeyDerivationMethodBuilder"/>
+            <MarshallingClass className="org.opensaml.xml.signature.impl.KeyDerivationMethodMarshaller"/>
+            <UnmarshallingClass className="org.opensaml.xml.signature.impl.KeyDerivationMethodUnmarshaller"/>
+        </ObjectProvider>     
+
     </ObjectProviders>
 
 </XMLTooling>

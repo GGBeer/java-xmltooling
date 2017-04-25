@@ -58,7 +58,14 @@
             <MarshallingClass className="org.opensaml.xml.schema.impl.XSBooleanMarshaller"/>
             <UnmarshallingClass className="org.opensaml.xml.schema.impl.XSBooleanUnmarshaller"/>
         </ObjectProvider>
-        
+
+        <!-- XML Schema hexBinary -->
+        <ObjectProvider qualifiedName="xs:base64Binary">
+            <BuilderClass className="org.opensaml.xml.schema.impl.XSHexBinaryBuilder"/>
+            <MarshallingClass className="org.opensaml.xml.schema.impl.XSHexBinaryMarshaller"/>
+            <UnmarshallingClass className="org.opensaml.xml.schema.impl.XSHexBinaryUnmarshaller"/>
+        </ObjectProvider>
+
     </ObjectProviders>
 
 </XMLTooling>

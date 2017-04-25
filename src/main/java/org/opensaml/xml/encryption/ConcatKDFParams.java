@@ -138,7 +138,7 @@ public interface ConcatKDFParams extends ValidatingXMLObject, ElementExtensibleX
    *
    * @return the DigestMethod child element
    */
-  public DigestMethod getDigestMethod(DigestMethod newDigestMethod);
+  public DigestMethod getDigestMethod();
 
   /**
    * Sets the DigestMethod child element.

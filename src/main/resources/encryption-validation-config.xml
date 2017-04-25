@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMLTooling xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns="http://www.opensaml.org/xmltooling-config">
-            
+<XMLTooling xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"
+            xmlns:xenc11='http://www.w3.org/2009/xmlenc11#' xmlns="http://www.opensaml.org/xmltooling-config">
+
      <!-- Validation rules for XML Encryption XMLObjects -->
     <ValidatorSuites>
     
@@ -24,6 +25,9 @@
             <Validator qualifiedName="xenc:RecipientKeyInfo" className="org.opensaml.xml.signature.validator.KeyInfoTypeSchemaValidator"/>
             <Validator qualifiedName="xenc:ReferenceList" className="org.opensaml.xml.encryption.validator.ReferenceListSchemaValidator"/>
             <Validator qualifiedName="xenc:Transforms" className="org.opensaml.xml.encryption.validator.TransformsSchemaValidator"/>
+        <!-- 1.1 Stuff -->
+            <Validator qualifiedName="xenc11:ConcatKDFParams" className="org.opensaml.xml.encryption.validator.ConcatKDFParamsSchemaValidator"/>
+            <Validator qualifiedName="xenc11:KeyDerivationMethod" className="org.opensaml.xml.encryption.validator.KeyDerivationMethodSchemaValidator"/>
         </ValidatorSuite>
     
         <!-- XML Encryption Specification Validation Rules -->
