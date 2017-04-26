@@ -93,10 +93,13 @@ public final class EncryptionConstants {
     /** Message Digest - REQUIRED SHA256. */
     public static final String ALGO_ID_DIGEST_SHA256 = XMLConstants.XMLENC_NS + "sha256";
     
+    /** Message Digest - OPTIONAL SHA384. */
+    public static final String ALGO_ID_DIGEST_SHA384 = XMLConstants.XMLENC_NS + "sha384";
+
     /** Message Digest - OPTIONAL SHA512. */
     public static final String ALGO_ID_DIGEST_SHA512 = XMLConstants.XMLENC_NS + "sha512";
-    
-    /** Message Digest - OPTIONAL RIPEMD-160. */
+
+  /** Message Digest - OPTIONAL RIPEMD-160. */
     public static final String ALGO_ID_DIGEST_RIPEMD160 = XMLConstants.XMLENC_NS + "ripemd160";
 
     // *********************************************************
