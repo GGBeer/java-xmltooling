@@ -116,8 +116,47 @@ public final class EncryptionConstants {
 
     /** URI for DerivedKey. */
     public static final String TYPE_DERIVED_KEY = XMLConstants.XMLENC11_NS + "DerivedKey";
-    
-    /** Constructor. */
+
+    /** Key Agreement - OPTIONAL Diffie-Hellman Key Agreement with Explicit Key Derivation Functions */
+    public static final String ALGO_ID_KEYAGREEMENT_DH_ES = XMLConstants.XMLENC11_NS + "dh-es";
+
+    /** Key Agreement - Elliptic Curve Diffie-Hellman (ECDH) Key Agreement (Ephemeral-Static Mode) */
+    public static final String ALGO_ID_KEYAGREEMENT_ECDH_ES = XMLConstants.XMLENC11_NS + "ECDH-ES";
+
+    /** Key-Derivation-Function - ConcatKDF key derivation algorithm, defined in Section 5.8.1 of NIST SP 800-56A */
+    public static final String ALGO_ID_NIST_CONCAT_KDF = XMLConstants.XMLENC11_NS + "ConcatKDF";
+
+    /** Key-Derivation-Function - The PBKDF2 key derivation algorithm and the ASN.1 type definitions for its parameters are defined in PKCS #5 v2.0 */
+    public static final String ALGO_ID_PBKDF2 = XMLConstants.XMLENC11_NS + "pbkdf2";
+
+    /**  Mask generation function MGF1 with SHA-1 */
+    public static final String ALGO_ID_MGF1_SHA1 = XMLConstants.XMLENC11_NS  + "mgf1sha1";
+
+    /**  Mask generation function MGF1 with SHA-224 */
+    public static final String ALGO_ID_MGF1_SHA224 = XMLConstants.XMLENC11_NS  + "mgf1sha224";
+
+    /**  Mask generation function MGF1 with SHA-256 */
+    public static final String ALGO_ID_MGF1_SHA256 = XMLConstants.XMLENC11_NS  + "mgf1sha256";
+
+    /**  Mask generation function MGF1 with SHA-384 */
+    public static final String ALGO_ID_MGF1_SHA384 = XMLConstants.XMLENC11_NS  + "mgf1sha384";
+
+    /**  Mask generation function MGF1 with SHA-512 */
+    public static final String ALGO_ID_MGF1_SHA512 = XMLConstants.XMLENC11_NS  + "mgf1sha512";
+
+    /** Symmetric Key Wrap with Padding - AES-128 KeyWrap-Pad. */
+    public static final String ALGO_ID_KEYWRAP_PAD_AES128 = XMLConstants.XMLENC11_NS + "kw-aes128-pad";
+
+    /** Symmetric Key Wrap with Padding - AES-192 KeyWrap-Pad. */
+    public static final String ALGO_ID_KEYWRAP_PAD_AES192 = XMLConstants.XMLENC11_NS + "kw-aes192-pad";
+
+    /** Symmetric Key Wrap with Padding - AES-256 KeyWrap-Pad. */
+    public static final String ALGO_ID_KEYWRAP_PAD_AES256 = XMLConstants.XMLENC11_NS + "kw-aes256-pad";
+
+    /** Type Attribute - Efficient XML Interchange (EXI) format type. */
+    public static final String TYPE_EXI = XMLConstants.XMLENC11_NS + "EXI";
+
+  /** Constructor. */
     private EncryptionConstants() {
         
     }
